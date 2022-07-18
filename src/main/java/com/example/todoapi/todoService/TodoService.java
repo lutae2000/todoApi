@@ -52,9 +52,13 @@ public class TodoService {
         return null;
     }
 
-    public void updateTodo(Todo todo){
-        todos.remove(todo);
+    public Todo updateTodo(Todo todo){
+        Todo deleteTodo = deleteById(todo.getId());
+
+        if(deleteTodo == null)
+            throw new RuntimeException();
         todos.add(todo);
+        return todo;
     }
 
     public Todo deleteById(int id){
