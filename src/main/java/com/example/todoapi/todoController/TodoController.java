@@ -28,11 +28,10 @@ public class TodoController {
 
     @Autowired
     private TodoService todoService;
-    @Cacheable(cacheNames = "todos", condition = "#user.length<10")
+
     @ApiOperation(value = "Retrieve all todo for a user by passing in his name", responseContainer = "List", produces = "application/json", response = Todo.class, consumes = "application/json")
     @GetMapping("/users/{name}/todos")
     public List<Todo> retrieveTodos(@PathVariable String name){
-        System.out.println(name);
         return todoService.retrieveTodos(name);
     }
 

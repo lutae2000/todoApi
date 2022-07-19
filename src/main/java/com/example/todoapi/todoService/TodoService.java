@@ -22,17 +22,18 @@ public class TodoService {
     static {
         todos.add(new Todo(1, "Jack", "Learn Spring MVC", new Date(), false));
         todos.add(new Todo(2, "Jack", "Learn Struts", new Date(), false));
-        todos.add(new Todo(3, "Jack", "Learn Hibernate", new Date(), false));
+        todos.add(new Todo(3, "Jill", "Learn Hibernate", new Date(), false));
+        todos.add(new Todo(4, "Jill", "Learn Spring MVC", new Date(), false));
     }
 
-    public List<Todo> retrieveTodos(String user){
-        //주어진 사용자에 대한 모든 todo 반환
-        List<Todo> todoList = new ArrayList<Todo>();
-        for(Todo todo : todos){
-            if(todo.getUser().equals(user))
-                todoList.add(todo);
+
+    public List<Todo> retrieveTodos(String user) {
+        List<Todo> filteredTodos = new ArrayList<Todo>();
+        for (Todo todo : todos) {
+            if (todo.getUser().equals(user))
+                filteredTodos.add(todo);
         }
-        return todoList;
+        return filteredTodos;
     }
 
     public Todo addTodo(String name, String desc, Date targetDate, boolean isDone){
