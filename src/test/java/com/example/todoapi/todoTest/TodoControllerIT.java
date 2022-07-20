@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.net.URI;
@@ -22,6 +19,7 @@ import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest(classes = TodoApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -59,5 +57,20 @@ public class TodoControllerIT {
         Todo todo = new Todo(-1, "Jill", "Learn Hibernate", new Date(), false);
         URI location = template.postForLocation("/users/Jill/todos", todo);
         assertThat(location.getPath(), containsString("/users/Jill/todos/5"));
+    }
+
+    @Test
+    public void updateTodo() throws Exception{
+        String expected = "{id:4, user:Jill, desc:\"Learn Spring MVC 5\", isDone:false}";
+        Todo todo = new Todo(4, "Jill", "Learn Spring MVC 5", new Date(), false);
+        ResponseEntity<String> response = template.exchange("/users/Jill/todos/" + todo.getId(), HttpMethod.PUT, new HttpEntity<>(todo, headers), String.class);
+        JSONAssert.assertEquals(expected, response.getBody(), false);
+    }
+
+    @Test
+    public void deleteTodo() throws Exception{
+        ResponseEntity<String> response = template.exchange(
+                "/users/Jill/todos/3",HttpMethod.DELETE, new HttpEntity<>(null, headers), String.class);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 }
